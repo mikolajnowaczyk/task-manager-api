@@ -51,14 +51,12 @@ class LoginPage extends React.Component {
             <Form.Control
               type={"text"}
               placeholder={"email"}
-              defaultValue="mikolajnowaczyk95@gmail.com"
               onChange={(e) => this.setState({ email: e.target.value })}
             />
             <Form.Label>{"password"}</Form.Label>
             <Form.Control
               type={"password"}
               placeholder={"****"}
-              defaultValue="Test123#@!"
               onChange={(e) => this.setState({ password: e.target.value })}
             />
           </Form.Group>
