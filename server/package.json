@@ -2,11 +2,13 @@
   "main": "index.js",
   "scripts": {
     "start": "node src/index.js",
-    "dev": "env-cmd ./config/dev.env nodemon src/index.js "
+    "dev": "env-cmd ./config/dev.env nodemon src/index.js",
+    "test": "jest"
   },
   "dependencies": {
     "@sendgrid/mail": "^6.3.1",
     "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
     "express": "^4.16.4",
     "jsonwebtoken": "^8.4.0",
     "mongodb": "^3.1.10",
@@ -16,7 +18,9 @@
     "validator": "^10.9.0"
   },
   "devDependencies": {
-    "nodemon": "^1.18.9",
-    "env-cmd": "^8.0.2"
-  }
+    "env-cmd": "^8.0.2",
+    "jest": "^23.6.0",
+    "nodemon": "^1.18.9"
+  },
+  "proxy": "http://localhost:5000"
 }
