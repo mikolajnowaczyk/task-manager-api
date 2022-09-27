@@ -12,21 +12,29 @@ class LoginPage extends React.Component {
     super();
     this.state = {
       isLoading: false,
-      email: "mikolajnowaczyk95@gmail.com",
-      password: "Test123#@!",
+      name: "",
+      email: "",
+      password: "",
       error: null,
       isSignup: false,
     };
-    // this.sendRequest = this.sendRequest.bind(this);
   }
 
   submitHandler = (event) => {
     event.preventDefault();
-    this.props.onAuth(
-      this.state.email,
-      this.state.password,
-      this.state.isSignup
-    );
+    if(this.state.isSignup){
+      this.props.onRegister(
+        this.state.name,
+        this.state.email,
+        this.state.password
+      );
+    }else{
+      this.props.onAuth(
+        this.state.email,
+        this.state.password
+      );
+
+    }
   };
 
   switchAuthModeHandler = () => {
@@ -36,7 +44,9 @@ class LoginPage extends React.Component {
   };
 
   render() {
-    if(this.state.isLoading){return(<p>Loading...</p>)};
+    if (this.state.isLoading) {
+      return <p>Loading...</p>;
+    }
     return (
       <Card style={{ margin: "3rem auto", width: "18rem" }}>
         {this.props.error && (
@@ -44,9 +54,25 @@ class LoginPage extends React.Component {
             {this.props.error}
           </Alert>
         )}
+        {this.props.successText && (
+          <Alert key={"success"} variant={"success"}>
+            {this.props.successText}
+          </Alert>
+        )}
         <Card.Body style={{ display: "flex", flexDirection: "column" }}>
           <Card.Title>{this.state.isSignup ? "Sign up" : "Login"}</Card.Title>
           <Form.Group className="mb-3">
+            {this.state.isSignup && (
+              <>
+                <Form.Label>{"name"}</Form.Label>
+                <Form.Control
+                  type={"text"}
+                  placeholder={"name"}
+                  onChange={(e) => this.setState({ name: e.target.value })}
+                />
+              </>
+            )}
+
             <Form.Label>{"email"}</Form.Label>
             <Form.Control
               type={"text"}
@@ -89,12 +115,14 @@ const mapStateToProps = (state) => {
     error: state.auth.error,
     isAuthenticated: state.auth.token !== null,
     authRedirectPath: state.auth.authRedirectPath,
+    successText: state.auth.successText
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onAuth: (email, password, isSignup) => dispatch(actions.auth(email, password, isSignup)),
+    onAuth: (email, password) => dispatch(actions.auth(email, password)),
+    onRegister: (name, email, password) => dispatch(actions.register(name, email, password)),
   };
 };
 

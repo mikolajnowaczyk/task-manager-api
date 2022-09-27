@@ -1,4 +1,3 @@
-// import axios from 'axios';
 import * as actionTypes from './actionTypes'
 import {isEmpty} from "lodash";
 
@@ -14,7 +13,7 @@ export const authFail = (error) => {
   console.log("erorr", error);
   return {
     type: actionTypes.AUTH_FAIL,
-    error: error
+    error
   }
 };
 
@@ -35,21 +34,34 @@ export const logout = () => {
   };
 };
 
-// export const checkAuthTimeout = (expirationTime) => {
-//   return dispatch => {
-//     setTimeout(() => {
-//       dispatch(logout());
-//     }, expirationTime * 1000);
-//   }
-// }
+export const registerStart = () => {
+  console.log("registerStart DISPATCH");
+  return {
+    type: actionTypes.REGISTER_START
+  }
+};
 
-export const auth = (email, password, isSignup) => {
+export const registerFail = (error) => {
+  console.log("registerFail DISPATCH");
+  console.log("erorr", error);
+  return {
+    type: actionTypes.REGISTER_FAIL,
+    error
+  }
+};
+
+export const registerSuccess = (successText) => {
+  console.log("registerSuccess DISPATCH");
+  return {
+    type: actionTypes.REGISTER_SUCCESS,
+    successText    
+  }
+};
+
+export const auth = (email, password) => {
   console.log("auth DISPATCH");
   return async dispatch => {
     dispatch(authStart());
-    // dispatch(authSuccess("FAKE TOKEN", "FAKE USER ID"));
-      // if (this.props.isLoading) return;
-      // this.setState({ isLoading: true, error: null });
       await fetch("/users/login", {
         method: "POST",
         body: JSON.stringify({
@@ -69,8 +81,6 @@ export const auth = (email, password, isSignup) => {
           localStorage.setItem("user", response.user)
           localStorage.setItem("token", response.token)
           dispatch(authSuccess(response.token, response.user));
-          // dispatch(setAuthRedirectPath("/dashboard"))
-          // dispatch(checkAuthTimeout(response.data.expiresIn))
         })
         .catch((err) => {
           dispatch(authFail(err));
@@ -78,28 +88,37 @@ export const auth = (email, password, isSignup) => {
   }
 }
 
-// export const setAuthRedirectPath = (path) => {
-//   return {
-//     type: actionTypes.SET_AUTH_REDIRECT_PATH,
-//     path: path
-//   }
-// }
-
-// export const authCheckState = () => {
-//   return dispatch => {
-//     const token = localStorage.getItem('token');
-//     if (!token) {
-//       dispatch(logout());
-//     } else {
-//       const expirationDate = new Date(localStorage.getItem('expirationDate'));
-//       if (expirationDate <= new Date()) {
-//         dispatch(logout());
-//       }
-//       else {
-//         const userId = localStorage.getItem('userId');
-//         dispatch(authSuccess(token, userId))
-//         dispatch(checkAuthTimeout((expirationDate.getTime() - new Date().getTime()) / 1000));
-//       }
-//     }
-//   };
-// }
+export const register = (name, email, password) => {
+  console.log("register DISPATCH");
+  return async dispatch => {
+    dispatch(registerStart());
+      await fetch("/users", {
+        method: "POST",
+        body: JSON.stringify({
+          name,
+          email,
+          password,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => response.json())
+        .then((resp) => {
+          console.log("resp", resp)
+          if(resp.errors){
+            dispatch(registerFail(resp.message))
+          }
+          else if(resp.errmsg?.includes("duplicate key error")){
+            dispatch(registerFail("Provided email is already used!"));
+          }
+          else{
+            dispatch(registerSuccess("Account successfully created! Now you can log in."));
+          }
+        })
+        .catch((err) => {
+          console.log("err", err)
+          dispatch(registerFail(err.errmsg));
+        });
+  }
+}

@@ -8,13 +8,18 @@ const {sendWelcomeEmail, sendCancelationEmail} = require('../emails/account');
 
 //create user
 router.post("/users", async (req, res) => {
+  console.log("CREATE USER HIT");
   const user = new User(req.body);
   try {
     await user.save();
     sendWelcomeEmail(user.email, user.name);
     const token = await user.generateAuthToken();
     res.status(201).send({ user, token });
+    console.log("user", user);
+    console.log("res", res);
   } catch (e) {
+    console.log("err", e);
+    console.log("res", res);
     res.status(400).send(e);
   }
 });
