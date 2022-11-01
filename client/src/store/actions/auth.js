@@ -2,15 +2,12 @@ import * as actionTypes from './actionTypes'
 import {isEmpty} from "lodash";
 
 export const authStart = () => {
-  console.log("authStart DISPATCH");
   return {
     type: actionTypes.AUTH_START
   }
 };
 
 export const authFail = (error) => {
-  console.log("authFail DISPATCH");
-  console.log("erorr", error);
   return {
     type: actionTypes.AUTH_FAIL,
     error
@@ -18,7 +15,6 @@ export const authFail = (error) => {
 };
 
 export const authSuccess = (tokenId, user) => {
-  console.log("authSuccess DISPATCH");
   return {
     type: actionTypes.AUTH_SUCCESS,
     tokenId,
@@ -35,15 +31,12 @@ export const logout = () => {
 };
 
 export const registerStart = () => {
-  console.log("registerStart DISPATCH");
   return {
     type: actionTypes.REGISTER_START
   }
 };
 
 export const registerFail = (error) => {
-  console.log("registerFail DISPATCH");
-  console.log("erorr", error);
   return {
     type: actionTypes.REGISTER_FAIL,
     error
@@ -51,7 +44,6 @@ export const registerFail = (error) => {
 };
 
 export const registerSuccess = (successText) => {
-  console.log("registerSuccess DISPATCH");
   return {
     type: actionTypes.REGISTER_SUCCESS,
     successText    
@@ -59,7 +51,6 @@ export const registerSuccess = (successText) => {
 };
 
 export const auth = (email, password) => {
-  console.log("auth DISPATCH");
   return async dispatch => {
     dispatch(authStart());
       await fetch("/users/login", {
@@ -89,7 +80,6 @@ export const auth = (email, password) => {
 }
 
 export const register = (name, email, password) => {
-  console.log("register DISPATCH");
   return async dispatch => {
     dispatch(registerStart());
       await fetch("/users", {
@@ -105,7 +95,6 @@ export const register = (name, email, password) => {
       })
         .then((response) => response.json())
         .then((resp) => {
-          console.log("resp", resp)
           if(resp.errors){
             dispatch(registerFail(resp.message))
           }
@@ -117,7 +106,6 @@ export const register = (name, email, password) => {
           }
         })
         .catch((err) => {
-          console.log("err", err)
           dispatch(registerFail(err.errmsg));
         });
   }
