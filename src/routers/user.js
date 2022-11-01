@@ -8,18 +8,13 @@ const {sendWelcomeEmail, sendCancelationEmail} = require('../emails/account');
 
 //create user
 router.post("/users", async (req, res) => {
-  console.log("CREATE USER HIT");
   const user = new User(req.body);
   try {
     await user.save();
     sendWelcomeEmail(user.email, user.name);
     const token = await user.generateAuthToken();
     res.status(201).send({ user, token });
-    console.log("user", user);
-    console.log("res", res);
   } catch (e) {
-    console.log("err", e);
-    console.log("res", res);
     res.status(400).send(e);
   }
 });
@@ -136,14 +131,10 @@ router.delete("/users/me/avatar", auth, async(req,res)=>{
 })
 
 //get avatar
-router.get("/users/:id/avatar",async (req,res)=>{
-  try{
-    const user = await User.findById(req.params.id);
-    if(!user || !user.avatar){
-      throw new Error();
-    }
+router.get("/users/me/avatar", auth, async (req,res)=>{
+  try{  
     res.set("Content-Type", "image/png");
-    res.send(user.avatar);
+    res.send(req.user.avatar);
   }catch(e){
     res.status(404).send();
   }
