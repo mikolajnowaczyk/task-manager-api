@@ -36,8 +36,8 @@ router.get("/tasks", auth, async (req, res) => {
         options: {
           limit: parseInt(req.query.limit),
           skip: parseInt(req.query.skip),
+          sort
         },
-        sort
       })
       .execPopulate();
     res.send(req.user.tasks);

@@ -6,10 +6,12 @@ const taskSchema = new mongoose.Schema(
       type: String,
       trim: true,
       required: true,
+      cast: false
     },
     completed: {
       type: Boolean,
       default: false,
+      cast: false
     },
     owner: {
       type: mongoose.Schema.Types.ObjectId,
@@ -20,5 +22,5 @@ const taskSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const Task = mongoose.model("Task", taskSchema)
+const Task = mongoose.model("Task", taskSchema);
 module.exports = Task;
