@@ -17,6 +17,7 @@ List of fetures:
 * On account deletion send a farewell email and delete all of user tasks
 * On account creation send a welcome mail
 * Password hash, tokens, avatar are filtered before sending back user object
+* Tests suites for users and tasks 
 
 List of user endpoints is presented below:
 Method | Endpoint | Returns |Description
