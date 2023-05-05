@@ -1,5 +1,5 @@
 # Task-manager-api
-API for task management. There is a user and tasks related API. For most of the calls, a token is required. [Link for live verion](https://nowc-task-manager.herokuapp.com/) (with some features covered in fronend).
+API for task management. There is a user and tasks related API. For most of the calls, a token is required. ~~[Link for live version](https://nowc-task-manager.herokuapp.com/) (with some features covered in fronend)~~ heroku is not available.
 
 List of tools:
 * MongoDB
